@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {% extends 'base.html' %}
 
 {% block title %}
@@ -7,5 +8,21 @@
 
 
 {% block content %}
-<h1 class="mt-5">トップページ</h1>
+
+<h1 class="mt-3">写真加工アプリrains</h1>
+<a href="/upload">アップロードする</a>
+<h1>過去にあげられた画像</h1>
+{% for p in photos %}
+    <div class="post">
+    {% if p.photo %}
+    <div class ="image">
+        <img src="/{{ p.photo.url }}" style="width:300px;height:auto">
+    </div>
+    {% endif %}
+        <div class="date">
+            {{ p.date }}
+        </div>
+    </div>
+{% endfor %}
+
 {% endblock content %}

@@ -5,3 +5,5 @@ __pycache__/
 
 myvenv/
 .DS_store
+
+db.sqlite3

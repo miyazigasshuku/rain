@@ -9,5 +9,8 @@ urlpatterns = [
     path('accounts/', include('accounts.urls')),
 ]
 
-# mediaも設定するべき
-urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+if settings.DEBUG:
+    urlpatterns += static(settings.IMAGE_URL,
+                          document_root=settings.IMAGE_ROOT)
+    urlpatterns += static(settings.STATIC_URL,
+                          document_root=settings.STATIC_ROOT)
