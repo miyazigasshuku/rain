@@ -14,7 +14,7 @@
         <div class="post">
         {% if p.photo %}
         <div class ="image">
-            <img src="/{{ p.photo.url }}" style="width:300px;height:auto">
+            <a href="/coordinate/{{ p.id }}"><img src="/{{ p.photo.url }}" style="width:300px;height:auto"></a>
         </div>
         {% endif %}
             <div class="date">

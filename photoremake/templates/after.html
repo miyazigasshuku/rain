@@ -1,0 +1,24 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <title>トップページ</title>
+
+</head>
+
+<body>
+    <h1>写真加工アプリrains</h1>
+    <h1>加工後画像</h1>
+    <div class="post">
+        <div class="image">
+            <img src="{{ image.url }}" style="width:300px;height:auto">
+        </div>
+        <div class="title">
+            {{ image.title }}
+        </div>
+    </div>
+</body>
+
+</html>

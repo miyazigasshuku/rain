@@ -1,0 +1,31 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <title>トップページ</title>
+
+</head>
+
+<body>
+    <h1>写真加工アプリrains</h1>
+    <a href="/upload">アップロードする</a>
+    <h1>加工前画像</h1>
+    <div class="post">
+        <div class="image">
+            <img src="/{{ p.photo.url }}" style="width:300px;height:auto">
+        </div>
+        <div class="date">
+            {{ p.date }}
+        </div>
+    </div>
+    <h1>背景画像選択</h1>
+
+    <form method="POST" id="match-form">{% csrf_token %}<button
+        class="btn btn-outline-info" 　type="submit"
+        style="border-color:rgb(255, 123, 215); color:rgb(255, 123, 215); background-color: white; border-radius:30px; font-size: x-large;">加工</button>
+    </form>
+</body>
+
+</html>
