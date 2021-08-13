@@ -1,24 +1,29 @@
 import cv2
+from PIL import Image, ImageDraw, ImageFilter
 
-face_cascade_path = '../OpenCV/haarcascades/haarcascade_frontalface_default.xml'
-eye_cascade_path = '../OpenCV/haarcascades/haarcascade_eye.xml'
+face_cascade_path = '/usr/local/opt/opencv/share/'\
+                   'OpenCV/haarcascades/haarcascade_frontalface_default.xml'
+face_cascade = cv2.CascadeClassifier(face_cascade_path) #顔認識
 
-face_cascade = cv2.CascadeClassifier(face_cascade_path)
-eye_cascade = cv2.CascadeClassifier(eye_cascade_path)
+im1 = Image.open('aogaku.jpg') #ベースになる写真
+im2 = Image.open('unnamed.jpg') #顔だけくり抜く時に使用
+src = cv2.imread('unnamed.jpg') #顔の位置を判別するために使用
+#ここがちょっとよくわかってなくて、同じ写真を2回読み込んじゃってる
 
-src = cv2.imread('download.jpg')
 src_gray = cv2.cvtColor(src, cv2.COLOR_BGR2GRAY)
-
 faces = face_cascade.detectMultiScale(src_gray)
-
-print(faces)
+# 顔認識
 
 for x, y, w, h in faces:
-    cv2.rectangle(src, (x, y), (x + w, y + h), (255, 0, 0), 2)
-    face = src[y: y + h, x: x + w]
-    face_gray = src_gray[y: y + h, x: x + w]
-    eyes = eye_cascade.detectMultiScale(face_gray)
-    for (ex, ey, ew, eh) in eyes:
-        cv2.rectangle(face, (ex, ey), (ex + ew, ey + eh), (0, 255, 0), 2)
+    mask_im = Image.new("L", im2.size, 0) # Lがよく分からない
+    draw = ImageDraw.Draw(mask_im)
+    draw.rectangle((x, y, x+w, y+h), fill=255) # 写真を顔の位置だけくり抜く
 
-cv2.imwrite('/face_detect_rectangle.jpg', src)
+back_im = im1.copy() #imgが上書き保存されないようにコピー ファイル名変えて保存するならいらない気がする
+back_im.paste(im2, (0, 0), mask_im) #im1にくり抜いた写真を貼り付け
+back_im.save('unit_output.jpg', quality=95) #保存
+
+src2 = cv2.imread('unit_output.jpg') #文字を書くために合成した写真を呼び出し
+cv2.putText(src2,'AOYAMAGAKUIN',(20, 500),cv2.FONT_HERSHEY_COMPLEX,3,(255,0,255),4, lineType=cv2.LINE_AA) #文字書く！
+
+cv2.imwrite('unit_output.jpg', src2) #保存
