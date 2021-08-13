@@ -1,18 +1,21 @@
-{% load static %}
+{% extends 'base.html' %}
 
-<!DOCTYPE html>
-<html lang = "ja">
-<head>
-    <meta charset = "UTF-8">
-    <title>トップページ</title>
+{% block title %}
+動画アップロード
+{% endblock title %}
 
-</head>
-<body>
-    <h1>画像のアップロード</h1>
 
-    <form method="POST" class="post-form" enctype="multipart/form-data">{% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="save btn btn-default">Save</button>
-    </form>
-</body>
-</html>
+
+{% block content %}
+
+<h1>画像のアップロード</h1>
+
+<form method="POST" class="post-form" enctype="multipart/form-data">{% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="save btn btn-default">Save</button>
+</form>
+
+
+{% endfor %}
+
+{% endblock content %}
