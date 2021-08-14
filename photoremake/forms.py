@@ -1,6 +1,6 @@
 from django import forms
 from django.db.models import fields
-from .models import Image, Photo
+from .models import Images, Photo
 
 class UploadForm(forms.ModelForm):
     class Meta:
@@ -9,5 +9,5 @@ class UploadForm(forms.ModelForm):
 
 class ImageForm(forms.ModelForm):
     class Meta:
-        model = Image
+        model = Images
         fields = ('title', 'image', 'action', 'user',)

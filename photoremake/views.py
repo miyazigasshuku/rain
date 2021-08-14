@@ -6,14 +6,15 @@ import cv2
 from PIL import Image, ImageDraw, ImageFilter
 from django.conf import settings
 from django.http.response import JsonResponse
-from photoremake.models import Photo, Image
+from photoremake.models import Photo, Images
 from .forms import UploadForm, ImageForm
 from django.utils.timezone import now
 # 関数型でしか書いたことないから関数でまず書くわ
 
 def index(request):
     photos = Photo.objects.all()
-    return render(request, 'index.html', {'photos': photos})
+    objs = Images.objects.all()
+    return render(request, 'index.html', {'photos': photos, 'objs':objs})
 
 face_cascade_path = '/usr/local/opt/opencv/share/'\
                    'OpenCV/haarcascades/haarcascade_frontalface_default.xml'
@@ -50,12 +51,12 @@ def upload_photo(request):
 
 
 def upload_image(request):
-    objs = Image.objects.all()
+    objs = Images.objects.all()
     if request.method == 'POST':
         print("POSTはされてる")
         form = ImageForm(request.POST, request.FILES)
         if form.is_valid():
-            img = Image()
+            img = Images()
             img.title = request.POST['title']
             img.image = request.FILES['image']
             img.action = request.POST['action']

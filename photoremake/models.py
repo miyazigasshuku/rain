@@ -9,13 +9,6 @@ import numpy as np
 from io import BytesIO
 from django.core.files.base import ContentFile
 
-class Photo(models.Model):
-    title = models.CharField(max_length=255, blank=True)
-    photo = models.ImageField(upload_to='images/original/', default='defo')
-    uploaded_at = models.DateTimeField(verbose_name='日付',default=now)
-    output = models.ImageField( default = 'output/output.jpg')
-    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, verbose_name='ユーザー',  blank=True, null=True)
-
 ACTION_CHOICES = (
     ('NO_FILTER', 'no filter'),
     ('COLORIZED', 'colorized'),
@@ -25,7 +18,16 @@ ACTION_CHOICES = (
     ('INVERT', 'invert')
 )
 
-class Image(models.Model):
+
+class Photo(models.Model):
+    title = models.CharField(max_length=255, blank=True)
+    photo = models.ImageField(upload_to='images/original/', default='defo')
+    uploaded_at = models.DateTimeField(verbose_name='日付',default=now)
+    output = models.ImageField( default = 'output/output.jpg')
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, verbose_name='ユーザー',  blank=True, null=True)
+
+
+class Images(models.Model):
     title = models.CharField(max_length=20, default='no title')
     image = models.ImageField(upload_to='images/photo/', blank=True, null=True)
     action = models.CharField(
