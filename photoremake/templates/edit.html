@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block title %}
+画像加工
+{% endblock title %}
+
+
+
+{% block content %}
+
+<div id="alert-box"></div>
+<div id="image-box" class="mb-3"></div>
+
+<form action="" id="image-form">
+    {% csrf_token %}
+    {{form.as_p}}
+</form>
+
+<button class="btn btn-primary mt-3 not-visible" id="confirm-btn">confirm</button>
+
+<h1 id="title">
+    koko
+
+</h1>
+
+{% endblock content %} 

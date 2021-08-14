@@ -106,6 +106,7 @@ def emotion(request):
             return render(request, 'upload.html', {'form': form})
         max_id = Photo.objects.latest('id').id
         obj = Photo.objects.get(id = max_id)
+        print(obj.photo.url)
         x = settings.BASE_DIR + "/" + obj.photo.url
         y = settings.BASE_DIR + "/" + obj.photo.url
         emo = analyze_emotion(x, y)
@@ -148,6 +149,7 @@ def back_aogaku(input_path, output_path):
     cv2.imwrite(output_path, img) #保存
 
 def analyze_emotion(input_path, output_path):
+    print(input_path)
     result = CF.face.detect(input_path, attributes='emotion')
     if result == []:
         result = [{"faceAttributes":{"emotion":{'anger': 0.0, 'contempt': 0.0, 'disgust': 0.0, 'fear': 0.0, 'happiness': 0.0, 'neutral': 0.0, 'sadness': 0.0, 'surprise': 0.0}}}]
