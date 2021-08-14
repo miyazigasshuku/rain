@@ -61,8 +61,8 @@ def upload_image(request):
             img.image = request.FILES['image']
             img.action = request.POST['action']
             img.user = request.user.id
-            form.uploaded_at = now()
-            form.save()
+            img.uploaded_at = now()
+            img.save()
             print("セーブ完了")
             return redirect('photoremake:index')
         else:
