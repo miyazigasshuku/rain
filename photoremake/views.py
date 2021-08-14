@@ -1,12 +1,14 @@
 from photoremake.models import Photo
 from django.shortcuts import render
 from django.views import generic
-from .forms import UploadForm
-from django.shortcuts import redirect
+from django.shortcuts import redirect, get_object_or_404
 import cv2
 from PIL import Image, ImageDraw, ImageFilter
 from django.conf import settings
-
+from django.http.response import JsonResponse
+from photoremake.models import Photo, Image
+from .forms import UploadForm, ImageForm
+from django.utils.timezone import now
 # 関数型でしか書いたことないから関数でまず書くわ
 
 def index(request):
@@ -30,7 +32,7 @@ def upload_photo(request):
         form = UploadForm()
         obj = Photo.objects.all()
 
-        #エラー処理のつもり🥺
+        #エラー処理のつもり
         if obj.exists() == False:
             return render(request, 'upload.html', {'form': form,'obj':obj,})
         
@@ -46,6 +48,32 @@ def upload_photo(request):
         'obj':obj,
     })
 
+
+def upload_image(request):
+    objs = Image.objects.all()
+    if request.method == 'POST':
+        print("POSTはされてる")
+        form = ImageForm(request.POST, request.FILES)
+        if form.is_valid():
+            img = Image()
+            img.title = request.POST['title']
+            img.image = request.FILES['image']
+            img.action = request.POST['action']
+            img.user = request.user.id
+            form.uploaded_at = now()
+            form.save()
+            print("セーブ完了")
+            return redirect('photoremake:index')
+        else:
+            print("失敗")
+    else:
+        form = ImageForm()
+
+
+    return render(request, 'upload_image.html', {
+        'form': form,
+        'objs':objs,
+    })
 
 ###########ここをカスタマイズ############
 
