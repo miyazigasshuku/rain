@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'widget_tweaks',
     'accounts',
     'django.contrib.sites',
+    'profiles',
 ]
 
 MIDDLEWARE = [
