@@ -1,3 +1,7 @@
+{% url 'posts:home' as path_to_home %}
+{% url 'profiles:all_profiles' as path_to_all_profiles %}
+{% url 'profiles:my-profile' as path_to_my_profile %}
+
 <nav class="navbar navbar-expand-lg navbar-light bg-light py-3 shadow rounded">
     <div class="container">
         <a class="navbar-brand" href="#">Rain</a>
@@ -8,11 +12,11 @@
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
+                <li class="{% if request.path == path_to_home %} nav-item text-danger {% endif %} nav-item">
                     <a class="nav-link" href="/"><i class="fa fa-home"></i>&nbsp;ホーム</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href=""><i class="fa fa-users"></i>&nbsp;ユーザー</a>
+                <li class="nav-item text-danger">
+                    <a class="nav-link" href="{% url 'profiles:all_profiles' %}"><i class="fa fa-users"></i>&nbsp;ユーザー</a>
                 </li>
             </ul>
             <ul class="navbar-nav ml-auto">

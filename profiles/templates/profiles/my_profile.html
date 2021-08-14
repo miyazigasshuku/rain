@@ -16,8 +16,7 @@ My Profile
     <div class="modal-content mt-3">
       <div class="modal-header">
         <h5 class="modal-title" id="myprofileModalLabel">プロフィール編集</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
+        <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">
         </button>
       </div>
       <div class="modal-body">
@@ -27,8 +26,8 @@ My Profile
             {% render_field form.bio class='form-control' placeholder='自己紹介' %}
           </div>
           <hr>
-          <div class="button mx-auto">
-            <button class="btn btn-lg btn-outline-warning btn-block mx-auto" type="submit">編集する</button>
+          <div class="button mx-auto text-center">
+            <button class="btn btn-outline-warning btn-block mx-auto" type="submit">更新する</button>
           </div>
         </form>
       </div>
@@ -44,7 +43,7 @@ My Profile
         <div class="card-body">
           <div class="row">
             <div class="col-12 col-md-5 text-center my-3">
-              <!-- <img class="p_avatar" src="{{ profile.avatar.url }}" alt=""> -->
+              <img class="p_avatar" src="{{ profile.avatar.url }}" alt="">
               <div class="mt-5">
                 <button class="btn btn-lg btn-outline-secondary" data-toggle="modal"
                   data-target="#myprofileModal">プロフィールを編集する</button>
