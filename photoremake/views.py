@@ -1,7 +1,7 @@
 from photoremake.models import Photo, Back, Coordinated
 from django.shortcuts import render
 from django.views import generic
-from .forms import UploadForm
+from .forms import UploadForm, CoordinateForm
 from django.shortcuts import redirect, get_object_or_404
 import cv2
 from PIL import Image, ImageDraw, ImageFilter
@@ -51,18 +51,26 @@ def photo2image(back, photo):
 
 def coordinate(request, pk):
     p = get_object_or_404(Photo, pk=pk)
-    
+    backs = Back.objects.all()
 
     if request.method == "POST":
-        coordinate = Coordinated()
-        coordinate.photo_id = p
-        coordinate.title = request.title
-        coordinate.image = photo2image(request.back_id.back_img, request.p.photo)
-        coordinate.save()
-        url = '/after/' + str(coordinate.id)
-        return redirect(url)
-
-    return render(request, 'coordinate.html', {'p': p})
+        form = CoordinateForm(request.POST)
+        if form.is_valid():
+            print("formは正しいです。")
+            coordinate = Coordinated()
+            coordinate.photo_id = p
+            coordinate.title = request.POST['title']
+            back_img_id = request.POST['back_id']
+            coordinate.back_img = Back.objects.get(back_img=back_img_id)
+            coordinate.image = photo2image(request.back_id.back_img, request.p.photo)
+            coordinate.save()
+            coordinated_photo = Coordinated.objects.get(title=request.title, photo_id=p)
+            return render(request, 'after.html', {'c_p': coordinated_photo})
+    
+    else:
+        form = CoordinateForm()
+        
+    return render(request, 'coordinate.html', {'p': p, 'backs':backs, 'form':form})
 
 def after(request, pk):
     image = get_object_or_404(Coordinated, pk=pk)
