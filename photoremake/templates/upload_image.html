@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}
+動画アップロード
+{% endblock title %}
+
+
+
+{% block content %}
+
+<h1>画像変更のアップロード ver. Okura</h1>
+
+<form method="POST" class="post-form" enctype="multipart/form-data">{% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="save btn btn-default">Save</button>
+</form>
+<h1>最近の投稿</h1>
+{% for obj in objs %}
+{% if obj.image %}
+    <td>{{ obj.title }}</td>
+    <td><img src="/{{ obj.image.url }}" width="100" height="100"/></td>
+    <td>{{ obj.uploaded_at }}</td>
+{% endif %}
+{% endfor %}
+
+{% endblock content %}
