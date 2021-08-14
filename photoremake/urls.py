@@ -8,4 +8,5 @@ urlpatterns = [
     path('upload/', views.upload_photo, name="upload"),
     path('coordinate/<int:pk>', views.coordinate, name="coordinate"),
     path('after/<int:pk>', views.after, name="after"),
+    path('edit/', views.edit_view, name='edit')
 ]
