@@ -9,7 +9,7 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item active">
-                    <a class="nav-link" href=""><i class="fa fa-home"></i>&nbsp;ホーム</a>
+                    <a class="nav-link" href="/"><i class="fa fa-home"></i>&nbsp;ホーム</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href=""><i class="fa fa-users"></i>&nbsp;ユーザー</a>
@@ -17,6 +17,9 @@
             </ul>
             <ul class="navbar-nav ml-auto">
                 {% if request.user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'profiles:my-profile' %}">{{ request.user }}</a>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'accounts:logout' %}">ログアウト</a>
                 </li>
