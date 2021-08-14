@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}
+動画アップロード
+{% endblock title %}
+
+
+
+{% block content %}
+
+<h1>感情分析</h1>
+<form method="POST" class="post-form" enctype="multipart/form-data">{% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="save btn btn-default">Save</button>
+</form>
+
+{% if obj.output %}
+<h1>最近の投稿</h1>
+<td>{{ obj.title }}</td>
+        <!--<td>{{ obj.gray_photo.url }}</td>-->
+        <td><img src="/{{ obj.photo.url }}" width="100" height="100"/></td>
+<td>{{ obj.uploaded_at }}</td>
+{% endif %}
+
+{% if emo %}
+<h1>感情たち</h1>
+<h1>1位　{{ one }}</h1>
+<h2>2位　{{ two }}</h2>
+<h3>3位　{{ three }}</h3>
+{% endif %}
+
+{% endblock content %}

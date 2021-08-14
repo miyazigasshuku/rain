@@ -12,22 +12,8 @@
 <h1 class="mt-3">写真加工アプリrains</h1>
 <a href="/upload">名刺作成する</a>
 <a href="/upload_image">画像の色をかえる</a>
+<a href="/emotion">感情判断</a>
 <h1>加工画像</h1>
-{% for p in photos %}
-    <div class="post">
-    {% if p.photo %}
-    <div class ="image">
-        <!-- <a href="coordinate/{{ p.id }}">
-            <img src="/{{ p.photo.url }}" style="width:300px;height:auto">
-        </a> -->
-        <img src="/{{ p.photo.url }}" style="width:300px;height:auto">
-    </div>
-    {% endif %}
-        <div class="date">
-            {{ p.uploaded_at }}
-        </div>
-    </div>
-{% endfor %}
 
 {% for p in photos %}
     <div class="post">

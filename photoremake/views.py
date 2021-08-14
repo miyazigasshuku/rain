@@ -10,6 +10,14 @@ from photoremake.models import Photo, Images
 from .forms import UploadForm, ImageForm
 from django.utils.timezone import now
 # 関数型でしか書いたことないから関数でまず書くわ
+import cognitive_face as CF
+from django.conf import settings
+
+KEY = 'ce8eaf1cb30c45ada745055d2ebfd63b'
+BASE_URL = 'https://japaneast.api.cognitive.microsoft.com/face/v1.0'
+
+CF.Key.set(KEY)
+CF.BaseUrl.set(BASE_URL)
 
 def index(request):
     photos = Photo.objects.all()
@@ -76,6 +84,44 @@ def upload_image(request):
         'objs':objs,
     })
 
+
+
+def emotion(request):
+    if request.method == 'POST':
+        form = UploadForm(request.POST, request.FILES)
+        if form.is_valid():
+            img = Photo()
+            img.title = request.POST['title']
+            img.photo = request.FILES['photo']
+            img.user = request.user.id
+            img.save()
+            print("セーブ完了")
+            return redirect('photoremake:index')
+        else:
+            print("失敗")
+    else:
+        form = UploadForm()
+        obj = Photo.objects.all()
+        if obj.exists() == False:
+            return render(request, 'upload.html', {'form': form})
+        max_id = Photo.objects.latest('id').id
+        obj = Photo.objects.get(id = max_id)
+        x = settings.BASE_DIR + "/" + obj.photo.url
+        y = settings.BASE_DIR + "/" + obj.photo.url
+        emo = analyze_emotion(x, y)
+        one, two, three = emo[0], emo[1], emo[2]
+        
+
+    return render(request, 'emotion.html', {
+        'form': form,
+        'obj':obj,
+        'emo': emo,
+        "one":one,
+        "two":two,
+        "three":three,
+    })
+
+
 ###########ここをカスタマイズ############
 
 def gray(input_path,output_path):
@@ -100,3 +146,71 @@ def back_aogaku(input_path, output_path):
     img = cv2.imread(input_path)
     cv2.putText(img,'AOYAMAGAKUIN',(20, 500),cv2.FONT_HERSHEY_COMPLEX,3,(255,0,255),4, lineType=cv2.LINE_AA) #文字書く！
     cv2.imwrite(output_path, img) #保存
+
+def analyze_emotion(input_path, output_path):
+    result = CF.face.detect(input_path, attributes='emotion')
+    if result == []:
+        result = [{"faceAttributes":{"emotion":{'anger': 0.0, 'contempt': 0.0, 'disgust': 0.0, 'fear': 0.0, 'happiness': 0.0, 'neutral': 0.0, 'sadness': 0.0, 'surprise': 0.0}}}]
+    img = cv2.imread(input_path)
+    print(result)
+    emotion = result[0]["faceAttributes"]['emotion']
+    print(emotion)
+    sorted_dict = sorted(emotion.items(), key = lambda item: item[1], reverse = True)
+    rank = sorted_dict[0:3]
+    ranking = japanese(rank)
+    text = str(rank)
+
+    for i in range(len(rank)):
+        text = str(rank[i][0])
+        fifty = (i + 1) * 50
+        cv2.putText(img, text,(0, fifty),cv2.FONT_HERSHEY_PLAIN,3,(0,0,0),6, lineType=cv2.LINE_AA) #文字書く！
+
+    #cv2.putText(img, text,(0, 50),cv2.FONT_HERSHEY_PLAIN,3,(3,184,115),1, lineType=cv2.LINE_AA) #文字書く！
+    cv2.imwrite(output_path, img) #保存
+    return ranking
+
+def japanese(ranking):
+    for i in range(len(ranking)):
+        integer = ranking[i][1]
+        if ranking[i][0] == 'anger':
+            text = "(' m '#)"
+            if integer > 0.5:
+                text = "このアプリに怒りをぶつけて！！"
+            ranking[i] = (text, integer)
+        elif ranking[i][0] == "contempt":
+            text = "-_-"
+            if integer > 0.5:
+                text = "ここまで蔑まれたらご褒b((ry"
+            ranking[i] = (text, integer)
+        elif ranking[i][0] == "disgust":
+            text = ">_<;"
+            if integer > 0.5:
+                text = "不愉快になるのは冬かい？"
+            ranking[i] = (text, integer)
+        elif ranking[i][0] == "fear":
+            text = "@_@;"
+            if integer > 0.5:
+                text = "畏れとは、、、悪い感情ではない"
+            ranking[i] = (text, integer)
+        elif ranking[i][0] == "happiness":
+            text = "❤︎_$"
+            if integer > 0.5:
+                text = "幸せのパラダイスや"
+            ranking[i] = (text, integer)
+        elif ranking[i][0] == "neutral":
+            text = "o_o"
+            if integer > 0.5:
+                text = "その感情「凪」"
+            ranking[i] = (text, integer)
+        elif ranking[i][0] == "sadness":
+            text = "（ ;  ; ）"
+            if integer > 0.5:
+                text = "ひどく悲しいみたいだね"
+            ranking[i] = (text, integer)
+        else:
+            text = "q (o ~ o) p"
+            if integer > 0.5:
+                text = "ひゃああああ"
+            ranking[i] = (text, integer)
+    print(ranking)
+    return ranking
