@@ -43,9 +43,14 @@ def upload_photo(request):
     obj = Photo.objects.all()
     form = UploadForm()
     if request.method == 'POST':
-        form = UploadForm(request.POST, request.FILES, request.POST)
+        form = UploadForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
+            usr = Profile.objects.get(user=request.user)
+            img = Photo()
+            img.title = request.POST['title']
+            img.photo = request.FILES['photo']
+            img.author = usr
+            img.save()
             print("セーブ完了")
             return redirect('photoremake:index')
     else:
@@ -101,10 +106,11 @@ def emotion(request):
     if request.method == 'POST':
         form = UploadForm(request.POST, request.FILES)
         if form.is_valid():
+            usr = Profile.objects.get(user=request.user)
             img = Photo()
             img.title = request.POST['title']
             img.photo = request.FILES['photo']
-            img.user = request.user.id
+            img.author = usr
             img.save()
             print("セーブ完了")
             return redirect('photoremake:index')
