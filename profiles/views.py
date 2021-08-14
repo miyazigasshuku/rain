@@ -52,3 +52,8 @@ class ProfileDetailView(LoginRequiredMixin, DetailView):
         slug = self.kwargs.get('slug')
         profile = Profile.objects.get(slug=slug)  # slugから特定のユーザーを取得
         return profile
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['photos'] = self.get_object().get_all_authors_photos()
+        return context

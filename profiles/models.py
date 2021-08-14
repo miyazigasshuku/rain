@@ -29,10 +29,10 @@ class Profile(models.Model):
     def get_absolute_url(self):
         return reverse('profiles:profile-detail', kwargs={'slug': self.slug})
 
-    def get_posts_count(self):
+    def get_photos_count(self):
         return self.photos.all().count()
 
-    def get_all_authors_posts(self):
+    def get_all_authors_photos(self):
         return self.photos.all()
 
     def save(self, *args, **kwargs):
