@@ -38,8 +38,10 @@ def upload_photo(request):
         obj = Photo.objects.get(id = max_id)
         x = settings.BASE_DIR + "/" + obj.photo.url
         y = settings.BASE_DIR + "/" + obj.photo.url
+        logo_zemi(x,y)
         #gray(x,y)
-        back_aogaku(x,y)
+        # back_aogaku(x,y)
+        
 
     return render(request, 'upload.html', {
         'form': form,
@@ -71,3 +73,33 @@ def back_aogaku(input_path, output_path):
     img = cv2.imread(input_path)
     cv2.putText(img,'AOYAMAGAKUIN',(20, 500),cv2.FONT_HERSHEY_COMPLEX,3,(255,0,255),4, lineType=cv2.LINE_AA) #文字書く！
     cv2.imwrite(output_path, img) #保存
+
+
+def logo_zemi(input_path, output_path):
+    face = Image.open(input_path)
+    back_img = settings.BASE_DIR + "/images/aogaku.jpg"
+    
+    logo = settings.BASE_DIR + "/images/myj2-black.jpg"
+    logo = Image.open(logo)
+    img_resize = logo.resize((100, 100))
+
+    judge = cv2.imread(input_path) #顔の位置を判別するために使用
+    back = Image.open(back_img)
+    faces = face_cascade.detectMultiScale(judge)
+    for x, y, w, h in faces:
+        mask_im = Image.new("L", face.size, 0) # Lがよく分からない
+        draw = ImageDraw.Draw(mask_im)
+        draw.rectangle((x, y, x+w, y+h), fill=255) # 写真を顔の位置だけくり抜く
+        back = back.copy()
+        back.paste(face, (0, 0), mask_im) #im1にくり抜いた写真を貼り付け
+        back.paste(img_resize,(680,410))
+        back.save(output_path, quality=95)
+
+
+
+   
+    # img.save(output_path,quality=95)
+
+    # img = cv2.imread(input_path)
+    # cv2.putText(img,'AOYAMAGAKUIN',(20, 500),cv2.FONT_HERSHEY_COMPLEX,3,(255,0,255),4, lineType=cv2.LINE_AA) #文字書く！
+    # cv2.imwrite(output_path, img) #保存
