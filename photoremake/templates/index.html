@@ -12,6 +12,30 @@
 <div class="row justify-content-center">
     <!-- <div class="col-md-3"></div> -->
     <div class="col-12 col-md-5">
+        <div class="button text-center mt-5 mb-2" data-toggle="collapse" data-target="#collapse_post" aria-expanded="false"　aria-controls="collapse_post">
+            <button class="btn btn-outline-info btn-block mx-auto">
+                    新規投稿
+            </button>
+        </div>
+        <div class="collapse" id="collapse_post">
+            <div class="card">
+                <div class="card-body pb-2">
+                    <form action="" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div>
+                            {% render_field p_form.title class='form-control' %}
+                        </div>
+                        <div class="my-2">
+                            {% render_field p_form.photo class='form-control text-muted' %}
+                        </div>
+                        <hr>
+                        <div class="text-center">
+                            <button class="btn btn-outline-secondary" type="submit" name="submit_p_form">投稿する</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
         {% for photo in photos %}
             <div class="card my-3 shadow-lg rounded">
                 <div class="card-header">
@@ -19,8 +43,8 @@
                         {{ photo.author.user }} : {{ photo.created|timesince}}前
                     </small>
                     <div class="row">
-                        <div class="col-md-12 text-center">
-                            <h3 class="card-text">{{ photo.title }}</h3>
+                        <div class="col-md-12 text-center my-1">
+                            <h4 class="card-text">{{ photo.title }}</h4>
                         </div>
                     </div>
                 </div>
@@ -30,8 +54,8 @@
                 <div class="card-body d-flex justify-content-end">
                     <div class="float-right">
                         {% ifequal request.user photo.author.user %}
-                        <a href="" class="btn mx-3">編集</a>
-                        <a href="" class="btn">削除</a>
+                        <a href="{% url 'photoremake:photo-update' photo.pk %}" class="btn mx-3">編集</a>
+                        <a href="{% url 'photoremake:photo-delete' photo.pk %}" class="btn btn-outline-danger">削除</a>
                         {% endifequal %}
                     </div>
                 </div>

@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Delete
+{% endblock title %}
+
+{% block content %}
+
+    {% if messages %}
+        {% for message in messages %}
+            {% if 'warning' in message.tags %}
+            <div class="alert alert-danger" role="alert">
+                {{message}}
+            </div>      
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+
+    {% if not messages %}
+
+    <div class="container">
+        <div class="card my-5 mx-5" style="width: 50vw;">
+            <div class="card-body my-4">
+                <p class="card-title text-center">本当にこの投稿を削除してもよろしいでしょうか？</p>
+                <form method="POST" class="form-auth">
+                    {% csrf_token %}
+                    <div class="button text-center mt-4">
+                        <button class="btn btn-outline-danger btn-block mx-auto" type="submit">削除する</button>
+                    </div>
+                </form>
+            </div>
+        </div>    
+    </div>
+
+
+    {% endif %}
+
+{% endblock content %}
