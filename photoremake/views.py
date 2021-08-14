@@ -1,6 +1,6 @@
 from photoremake.models import Photo, Back, Coordinated
 from django.shortcuts import render
-from django.views import generic
+from django.views.generic import ListView
 from .forms import UploadForm, CoordinateForm
 from django.shortcuts import redirect, get_object_or_404
 import cv2
@@ -8,7 +8,16 @@ from PIL import Image, ImageDraw, ImageFilter
 
 
 # 関数型でしか書いたことないから関数でまず書くわ
+class MemberList(ListView):
+    template_name = 'itiran.html'
+    context_object_name = 'member_list'
+    model = Coordinated
 
+class IndividualList(ListView):
+    template_name = 'kozin.html'
+    context_object_name = 'Individual_list'
+    model = Coordinated
+    
 def index(request):
     photos = Photo.objects.all()
     return render(request, 'index.html', {'photos': photos})
