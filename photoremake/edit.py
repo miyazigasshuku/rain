@@ -22,9 +22,8 @@ def main():
         draw = ImageDraw.Draw(mask_im)
         draw.rectangle((x, y, x+w, y+h), fill=255) # 写真を顔の位置だけくり抜く
 
-    back_im = im1.copy() #imgが上書き保存されないようにコピー ファイル名変えて保存するならいらない気がする
-    back_im.paste(im2, (0, 0), mask_im) #im1にくり抜いた写真を貼り付け
-    back_im.save('unit_output.jpg', quality=95) #保存
+    im1.paste(im2, (0, 0), mask_im) #im1にくり抜いた写真を貼り付け
+    im1.save('unit_output.jpg', quality=95) #保存
 
     src2 = cv2.imread('unit_output.jpg') #文字を書くために合成した写真を呼び出し
     cv2.putText(src2,'AOYAMAGAKUIN',(20, 500),cv2.FONT_HERSHEY_COMPLEX,3,(255,0,255),4, lineType=cv2.LINE_AA) #文字書く！

@@ -2,15 +2,10 @@ from photoremake.models import Photo
 from django.shortcuts import render
 from django.views import generic
 from .forms import UploadForm
-from django.shortcuts import redirect, get_object_or_404
-from django.urls import reverse
-import numpy as np
+from django.shortcuts import redirect
 import cv2
 from PIL import Image, ImageDraw, ImageFilter
-import io
-import base64
 from django.conf import settings
-import os
 
 # 関数型でしか書いたことないから関数でまず書くわ
 
@@ -42,11 +37,9 @@ def upload_photo(request):
         max_id = Photo.objects.latest('id').id
         obj = Photo.objects.get(id = max_id)
         x = settings.BASE_DIR + "/" + obj.photo.url
-        # print(x)
-        # img = cv2.imread(x)
-        # print(img)
         y = settings.BASE_DIR + "/" + obj.photo.url
-        gray(x,y)
+        #gray(x,y)
+        back_aogaku(x,y)
 
     return render(request, 'upload.html', {
         'form': form,
@@ -58,19 +51,23 @@ def upload_photo(request):
 
 def gray(input_path,output_path):
     img = cv2.imread(input_path)
-    back_img = settings.BASE_DIR + "/images/aogaku.jpg"
-    back = cv2.imread(back_img)
     img_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    #cv2.imwrite(output_path, img_gray)
+    cv2.imwrite(output_path, img_gray)
 
-    faces = face_cascade.detectMultiScale(img_gray)
 
+def back_aogaku(input_path, output_path):
+    face = Image.open(input_path)
+    back_img = settings.BASE_DIR + "/images/aogaku.jpg"
+    judge = cv2.imread(input_path) #顔の位置を判別するために使用
+    back = Image.open(back_img)
+    faces = face_cascade.detectMultiScale(judge)
     for x, y, w, h in faces:
-        mask_im = Image.new("L", img.size, 0) # Lがよく分からない
+        mask_im = Image.new("L", face.size, 0) # Lがよく分からない
         draw = ImageDraw.Draw(mask_im)
         draw.rectangle((x, y, x+w, y+h), fill=255) # 写真を顔の位置だけくり抜く
-    back = img.copy()
-    back.paste(img, (0, 0), mask_im) #im1にくり抜いた写真を貼り付け
-    cv2.putText(back,'AOYAMAGAKUIN',(20, 500),cv2.FONT_HERSHEY_COMPLEX,3,(255,0,255),4, lineType=cv2.LINE_AA) #文字書く！
-    cv2.imwrite(output_path, back) #保存
-
+    back = back.copy()
+    back.paste(face, (0, 0), mask_im) #im1にくり抜いた写真を貼り付け
+    back.save(input_path, quality=95)
+    img = cv2.imread(input_path)
+    cv2.putText(img,'AOYAMAGAKUIN',(20, 500),cv2.FONT_HERSHEY_COMPLEX,3,(255,0,255),4, lineType=cv2.LINE_AA) #文字書く！
+    cv2.imwrite(output_path, img) #保存
