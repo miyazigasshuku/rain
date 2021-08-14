@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}
+一覧
+{% endblock title %}
+
+{% block content %}
+
+{% for Coordinated in member_list %}
+{{ Coordinated.id }}
+<br>
+{{ Coordinated.title }}
+<br>
+<div class="post">
+    {% if Coordinated.image %}
+    <div class ="image">
+        <a href="coordinate/{{ Coordinated.id }}"><img src="/{{ Coordinated.image.url }}" style="width:300px;height:auto"></a>
+    </div>
+    {% endif %}
+<br>
+{{ Coordinated.date }}
+<br>
+{% endfor %}
+
+{% endblock content %}

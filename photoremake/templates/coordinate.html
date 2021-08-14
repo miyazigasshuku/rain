@@ -20,9 +20,15 @@
     </div>
     <h1>背景画像選択</h1>
 
-    <form method="POST" id="match-form">{% csrf_token %}<button
-        class="btn btn-outline-info" 　type="submit"
-        style="border-color:rgb(255, 123, 215); color:rgb(255, 123, 215); background-color: white; border-radius:30px; font-size: x-large;">加工</button>
+    <form method="POST" class="post-form" enctype="multipart/form-data">{% csrf_token %}
+        {{ form.as_p }}
+        {% for back in backs %}
+        <div class="image">
+            <img src="/{{ back.back_img.url }}" style="width:300px;height:auto">
+        </div>
+        {% endfor %}
+        <button type="submit" class="save btn btn-default">加工する</button>
     </form>
+    
 
 {% endblock content %}
