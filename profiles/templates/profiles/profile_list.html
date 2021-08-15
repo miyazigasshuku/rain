@@ -23,7 +23,7 @@
                     <div class="card-body">
                         <div class="row text-center align-items-center">
                             <div class="col-md-3">
-                                <img class="p_avatar" src="{{ obj.avatar.url }}" alt="">
+                                <img src="/images/{{ obj.avatar.url }}" alt="" style="width: 55%; border-radius: 50%;">
                             </div>
                             <div class="col-md-5">
                                 <span class="text-muted">ユーザー名：</span>
@@ -31,7 +31,7 @@
                             </div>
                             <div class="col-md-2">
                                 <a href={{obj.get_absolute_url}}>
-                                    <button class="btn btn-success px-2"><i class="fa fa-search-plus"></i> もっと見る</button>
+                                    <button class="btn btn-outline-success p-3"><i class="fa fa-search-plus"></i> もっと見る</button>
                                 </a>
                             </div>
                         </div>

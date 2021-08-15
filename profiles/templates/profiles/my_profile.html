@@ -42,10 +42,10 @@ My Profile
       <div class="card shadow-lg rounded">
         <div class="card-body">
           <div class="row">
-            <div class="col-12 col-md-5 text-center my-3">
-              <img class="p_avatar" src="{{ profile.avatar.url }}" alt="">
+            <div class="col-12 col-md-5 text-center">
+              <img src="/images/{{ profile.avatar.url }}" alt="" style="width: 65%; border-radius: 50%;">
               <div class="mt-5">
-                <button class="btn btn-lg btn-outline-secondary" data-toggle="modal"
+                <button class="btn btn-outline-secondary" data-toggle="modal"
                   data-target="#myprofileModal">プロフィールを編集する</button>
               </div>
             </div>

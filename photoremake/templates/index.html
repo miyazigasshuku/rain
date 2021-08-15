@@ -12,8 +12,8 @@
 <div class="row justify-content-center">
     <!-- <div class="col-md-3"></div> -->
     <div class="col-12 col-md-5">
-        <div class="button text-center mt-5 mb-2" data-toggle="collapse" data-target="#collapse_post" aria-expanded="false"　aria-controls="collapse_post">
-            <button class="btn btn-outline-info btn-block mx-auto">
+        <div class="button text-center mt-5 mb-4" data-toggle="collapse" data-target="#collapse_post" aria-expanded="false"　aria-controls="collapse_post">
+            <button class="btn btn-outline-light btn-block mx-auto px-5">
                     新規投稿
             </button>
         </div>
@@ -51,7 +51,12 @@
                 {% if photo.photo %}
                 <img class="card-img-top" src="{{ photo.photo.url }}" alt="">
                 {% endif %}
-                <div class="card-body d-flex justify-content-end">
+                <div class="card-body d-flex justify-content-between">
+                    <div>
+                        {% ifequal request.user photo.author.user %}
+                        <a href="{% url 'photoremake:emotion' photo.pk %}" class="btn btn-outline-primary">感情分析</a>
+                        {% endifequal %}
+                    </div>
                     <div class="float-right">
                         {% ifequal request.user photo.author.user %}
                         <a href="{% url 'photoremake:photo-update' photo.pk %}" class="btn mx-3">編集</a>

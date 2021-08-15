@@ -155,40 +155,29 @@ def upload_image(request):
     })
 
 
-def emotion(request):
-    if request.method == 'POST':
-        form = UploadForm(request.POST, request.FILES)
-        if form.is_valid():
-            usr = Profile.objects.get(user=request.user)
-            img = Photo()
-            img.title = request.POST['title']
-            img.photo = request.FILES['photo']
-            img.author = usr
-            img.save()
-            print("セーブ完了")
-            return redirect('photoremake:emotion')
-        else:
-            print("失敗")
-    else:
-        form = UploadForm()
-        obj = Photo.objects.all()
-        if obj.exists() == False:
-            return render(request, 'upload.html', {'form': form})
-        max_id = Photo.objects.latest('id').id
-        obj = Photo.objects.get(id=max_id)
-        print(obj.photo.url)
-        x = settings.BASE_DIR + "/" + obj.photo.url
-        y = settings.BASE_DIR + "/" + obj.photo.url
-        emo = analyze_emotion(x, y)
-        one, two, three = emo[0], emo[1], emo[2]
+def emotion(request, pk):
+    form = UploadForm()
+    obj = Photo.objects.all()
+    if obj.exists() == False:
+        return render(request, 'upload.html', {'form': form})
+    obj = Photo.objects.get(id=pk)
+    x = settings.BASE_DIR + "/" + obj.photo.url
+    y = settings.BASE_DIR + "/" + obj.photo.url
+    emo = analyze_emotion(x, y)
+    text1, score1 = emo[0][0], emo[0][1]
+    text2, score2 = emo[1][0], emo[1][1]
+    text3, score3 = emo[2][0], emo[2][1]
 
     return render(request, 'emotion.html', {
         'form': form,
         'obj': obj,
         'emo': emo,
-        "one": one,
-        "two": two,
-        "three": three,
+        "text1": text1,
+        "score1": score1,
+        "text2": text2,
+        "score2": score2,
+        "text3": text3,
+        "score3": score3,
     })
 
 

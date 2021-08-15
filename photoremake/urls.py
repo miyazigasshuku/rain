@@ -9,5 +9,5 @@ urlpatterns = [
     path('<pk>/delete', views.PhotoDeleteView.as_view(), name='photo-delete'),
     path('upload/', views.upload_photo, name="upload"),
     path('upload_image/', views.upload_image, name='upload_image'),
-    path('emotion/', views.emotion, name='emotion')
+    path('<pk>/emotion/', views.emotion, name='emotion')
 ]
