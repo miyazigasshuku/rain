@@ -3,7 +3,7 @@ from django.shortcuts import render
 from django.views import generic
 from django.shortcuts import redirect, get_object_or_404
 import cv2
-from PIL import Image, ImageDraw, ImageFilter
+from PIL import Image, ImageDraw, ImageFilter, ImageFont
 from django.conf import settings
 from django.http.response import JsonResponse
 from photoremake.models import Photo, Images
@@ -179,55 +179,66 @@ def analyze_emotion(input_path, output_path):
     ranking = japanese(rank)
     text = str(rank)
 
+    img = Image.open(input_path)
+    font_ttf = "ヒラギノ明朝 ProN.ttc"
+    draw = ImageDraw.Draw(img)
+    font = ImageFont.truetype(font_ttf, size=50)
     for i in range(len(rank)):
         text = str(rank[i][0])
-        fifty = (i + 1) * 50
-        cv2.putText(img, text,(0, fifty),cv2.FONT_HERSHEY_PLAIN,3,(0,0,0),6, lineType=cv2.LINE_AA) #文字書く！
+        height = i*50
+        draw.text((0, height), text, fill=(255,0,0), font=font)
+    img.save(output_path)
+
+    # for i in range(len(rank)):
+    #     text = str(rank[i][0])
+    #     fifty = (i + 1) * 50
+    #     cv2.putText(img, text,(0, fifty),cv2.FONT_HERSHEY_PLAIN,3,(0,0,0),6, lineType=cv2.LINE_AA) #文字書く！
 
     #cv2.putText(img, text,(0, 50),cv2.FONT_HERSHEY_PLAIN,3,(3,184,115),1, lineType=cv2.LINE_AA) #文字書く！
-    cv2.imwrite(output_path, img) #保存
+    
+    #cv2.imwrite(output_path, img) #保存
     return ranking
 
 def japanese(ranking):
     for i in range(len(ranking)):
         integer = ranking[i][1]
         if ranking[i][0] == 'anger':
-            text = "(' m '#)"
+            text = "怒(' m '#)"
             if integer > 0.5:
                 text = "このアプリに怒りをぶつけて！！"
             ranking[i] = (text, integer)
         elif ranking[i][0] == "contempt":
-            text = "-_-"
+            text = "蔑-_-"
             if integer > 0.5:
                 text = "ここまで蔑まれたらご褒b((ry"
             ranking[i] = (text, integer)
         elif ranking[i][0] == "disgust":
-            text = ">_<;"
+            text = "不愉快>_<;"
             if integer > 0.5:
                 text = "不愉快になるのは冬かい？"
             ranking[i] = (text, integer)
         elif ranking[i][0] == "fear":
-            text = "@_@;"
+            text = "畏@_@;"
             if integer > 0.5:
                 text = "畏れとは、、、悪い感情ではない"
             ranking[i] = (text, integer)
         elif ranking[i][0] == "happiness":
-            text = "❤︎_$"
+            text = "幸￥_$"
             if integer > 0.5:
                 text = "幸せのパラダイスや"
             ranking[i] = (text, integer)
         elif ranking[i][0] == "neutral":
-            text = "o_o"
+            text = "中立o_o"
             if integer > 0.5:
                 text = "その感情「凪」"
             ranking[i] = (text, integer)
         elif ranking[i][0] == "sadness":
-            text = "（ ;  ; ）"
+            text = "悲（ ;  ; ）"
             if integer > 0.5:
                 text = "ひどく悲しいみたいだね"
             ranking[i] = (text, integer)
         else:
-            text = "q (o ~ o) p"
+            text = "驚q (o ~ o) p"
             if integer > 0.5:
                 text = "ひゃああああ"
             ranking[i] = (text, integer)
