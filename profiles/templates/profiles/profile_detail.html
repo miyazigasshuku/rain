@@ -12,7 +12,11 @@
   <div class="row justify-content-center">
     <div class="col-12 col-md-6">
       {% if profile.avatar %}
+<<<<<<< HEAD
       <img class="img-thumbnail d_avatar" src="/images/{{ profile.avatar.url }}" alt="">
+=======
+      <img class="" src="/images/{{ profile.avatar.url }}" style="width: 60%; border-radius: 50%">
+>>>>>>> 97ce55e6be31576408bac7598a1f39b544a7dc4d
       {% endif %}
       <div>
         <h1 class="mb-4">{{ object.user }}</h1>
@@ -21,16 +25,19 @@
     </div>
     <div class="col-12 col-md-6">
       {% for photo in photos %}
-      <div class="card mb-3 shadow rounded">
+      <div class="card mb-3 shadow-lg rounded">
         <div class="card-header">
-          <p class="card-text"><small class="text-muted">{{ photo.created|timesince}}前</small></p>
-        </div>
+          <small class="text-muted">{{ photo.created|timesince}}前
+          </small>
+          <div class="row">
+              <div class="col-md-12 text-center">
+                  <h4 class="card-text">{{ photo.title }}</h4>
+              </div>
+          </div>
+      </div>
         {% if photo.photo %}
-          <img class="card-img-top" src="/{{ photo.photo.url }}" alt="">
+          <img class="card-img-top rounded" src="/{{ photo.photo.url }}">
         {% endif %}
-        <div class="card-body">
-          <p class="card-text">{{ photo.title }}</p>
-        </div>
       </div>
       {% endfor %}
     </div>
