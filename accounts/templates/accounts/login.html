@@ -14,11 +14,11 @@ Login
         <form method="POST" class="form-auth">
             {% csrf_token %}
             <div class="my-3">
-                {% render_field form.username class='form-control' placeholder='ユーザー名' %}
+                {% render_field form.username class='form-control' placeholder='ユーザー名（testuser）' %}
             </div>
 
             <div class="my-3">
-                {% render_field form.password class='form-control' placeholder='パスワード' %}
+                {% render_field form.password class='form-control' placeholder='パスワード（myjlab0815）' %}
             </div>
 
             <!-- エラー表示開始 -->
