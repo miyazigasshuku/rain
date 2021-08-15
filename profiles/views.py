@@ -51,7 +51,6 @@ class ProfileDetailView(LoginRequiredMixin, DetailView):
     def get_object(self):
         slug = self.kwargs.get('slug')
         profile = Profile.objects.get(slug=slug)  # slugから特定のユーザーを取得
-        print(profile.avatar.url)
         return profile
 
     def get_context_data(self, **kwargs):

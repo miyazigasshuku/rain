@@ -188,15 +188,6 @@ def analyze_emotion(input_path, output_path):
         height = i*50
         draw.text((0, height), text, fill=(255,0,0), font=font)
     img.save(output_path)
-
-    # for i in range(len(rank)):
-    #     text = str(rank[i][0])
-    #     fifty = (i + 1) * 50
-    #     cv2.putText(img, text,(0, fifty),cv2.FONT_HERSHEY_PLAIN,3,(0,0,0),6, lineType=cv2.LINE_AA) #文字書く！
-
-    #cv2.putText(img, text,(0, 50),cv2.FONT_HERSHEY_PLAIN,3,(3,184,115),1, lineType=cv2.LINE_AA) #文字書く！
-    
-    #cv2.imwrite(output_path, img) #保存
     return ranking
 
 def japanese(ranking):
